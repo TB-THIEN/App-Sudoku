@@ -1,5 +1,13 @@
-<?xml version="1.0" encoding="utf-8"?>
 <resources>
-    <color name="black">#FF000000</color>
-    <color name="white">#FFFFFFFF</color>
+    <color name="colorPrimary">#3F51B5</color>
+    <color name="colorBackground">#F5F5F5</color>
+    <color name="cell_border">#BDBDBD</color>
+    <color name="cell_border_selected">#3F51B5</color>
+    <color name="cell_border_error">#F44336</color>
+    <color name="cell_border_hint">#4CAF50</color>
+    <color name="text_given">#212121</color>
+    <color name="text_input">#3F51B5</color>
+    <color name="text_error">#F44336</color>
+    <color name="text_hint_cell">#4CAF50</color>
+    <color name="box_border">#424242</color>
 </resources>
