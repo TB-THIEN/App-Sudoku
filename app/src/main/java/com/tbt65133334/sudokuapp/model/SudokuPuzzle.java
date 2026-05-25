@@ -23,7 +23,7 @@ public class SudokuPuzzle {
     public int[][] getSolution()  { return solution; }
     public int getDifficulty()    { return difficulty; }
 
-    // Kiểm tra ô có phải ô đề 
+    // Kiểm tra ô có phải ô đề
     public boolean isGiven(int row, int col) {
         return puzzle[row][col] != 0;
     }
