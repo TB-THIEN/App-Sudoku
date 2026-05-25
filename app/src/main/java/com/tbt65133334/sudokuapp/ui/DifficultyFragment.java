@@ -1,66 +1,41 @@
 package com.tbt65133334.sudokuapp.ui;
 
 import android.os.Bundle;
-
+import android.view.*;
+import androidx.annotation.NonNull;
 import androidx.fragment.app.Fragment;
-
-import android.view.LayoutInflater;
-import android.view.View;
-import android.view.ViewGroup;
-
+import com.tbt65133334.sudokuapp.MainActivity;
 import com.tbt65133334.sudokuapp.R;
+import com.tbt65133334.sudokuapp.ui.GameFragment;
 
-/**
- * A simple {@link Fragment} subclass.
- * Use the {@link DifficultyFragment#newInstance} factory method to
- * create an instance of this fragment.
- */
 public class DifficultyFragment extends Fragment {
 
-    // TODO: Rename parameter arguments, choose names that match
-    // the fragment initialization parameters, e.g. ARG_ITEM_NUMBER
-    private static final String ARG_PARAM1 = "param1";
-    private static final String ARG_PARAM2 = "param2";
+    public static final int EASY   = 0;
+    public static final int MEDIUM = 1;
+    public static final int HARD   = 2;
 
-    // TODO: Rename and change types of parameters
-    private String mParam1;
-    private String mParam2;
+    @Override
+    public View onCreateView(@NonNull LayoutInflater inflater,
+                             ViewGroup container, Bundle savedInstanceState) {
+        View v = inflater.inflate(R.layout.fragment_difficulty, container, false);
 
-    public DifficultyFragment() {
-        // Required empty public constructor
+        v.findViewById(R.id.btn_easy).setOnClickListener(b -> startGame(EASY));
+        v.findViewById(R.id.btn_medium).setOnClickListener(b -> startGame(MEDIUM));
+        v.findViewById(R.id.btn_hard).setOnClickListener(b -> startGame(HARD));
+
+        v.findViewById(R.id.btn_home).setOnClickListener(b ->
+                ((MainActivity) requireActivity()).goHome());
+        v.findViewById(R.id.btn_back).setOnClickListener(b ->
+                requireActivity().getSupportFragmentManager().popBackStack());
+
+        return v;
     }
 
-    /**
-     * Use this factory method to create a new instance of
-     * this fragment using the provided parameters.
-     *
-     * @param param1 Parameter 1.
-     * @param param2 Parameter 2.
-     * @return A new instance of fragment DifficultyFragment.
-     */
-    // TODO: Rename and change types and number of parameters
-    public static DifficultyFragment newInstance(String param1, String param2) {
-        DifficultyFragment fragment = new DifficultyFragment();
+    private void startGame(int difficulty) {
         Bundle args = new Bundle();
-        args.putString(ARG_PARAM1, param1);
-        args.putString(ARG_PARAM2, param2);
-        fragment.setArguments(args);
-        return fragment;
-    }
-
-    @Override
-    public void onCreate(Bundle savedInstanceState) {
-        super.onCreate(savedInstanceState);
-        if (getArguments() != null) {
-            mParam1 = getArguments().getString(ARG_PARAM1);
-            mParam2 = getArguments().getString(ARG_PARAM2);
-        }
-    }
-
-    @Override
-    public View onCreateView(LayoutInflater inflater, ViewGroup container,
-                             Bundle savedInstanceState) {
-        // Inflate the layout for this fragment
-        return inflater.inflate(R.layout.fragment_difficulty, container, false);
+        args.putInt("difficulty", difficulty);
+        GameFragment gameFragment = new GameFragment();
+        gameFragment.setArguments(args);
+        ((MainActivity) requireActivity()).navigateTo(gameFragment, true);
     }
 }

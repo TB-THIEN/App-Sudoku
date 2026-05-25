@@ -162,4 +162,13 @@ public class SudokuDatabase extends SQLiteOpenHelper {
         cv.put(COL_SOLUTION, solution);
         db.insert(TABLE_PUZZLES, null, cv);
     }
+    // Thêm vào trước dấu } cuối cùng của class
+    public int getPuzzleCount() {
+        SQLiteDatabase db = getReadableDatabase();
+        Cursor cursor = db.rawQuery("SELECT COUNT(*) FROM " + TABLE_PUZZLES, null);
+        int count = 0;
+        if (cursor.moveToFirst()) count = cursor.getInt(0);
+        cursor.close();
+        return count;
+    }
 }

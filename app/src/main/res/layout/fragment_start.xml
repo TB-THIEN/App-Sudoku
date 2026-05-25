@@ -1,0 +1,62 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical"
+    android:padding="16dp">
+
+    <include layout="@layout/toolbar_sudoku"/>
+
+    <TextView android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Thống Kê"
+        android:textSize="24sp" android:textStyle="bold"
+        android:layout_gravity="center"
+        android:layout_marginVertical="16dp"/>
+
+    <!-- Bảng thống kê -->
+    <TableLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:stretchColumns="1,2,3">
+
+        <!-- Header -->
+        <TableRow android:background="#F00808">
+            <TextView android:text="" android:padding="8dp"
+                android:textColor="@color/white" android:textStyle="bold"/>
+            <TextView android:text="Dễ" android:padding="8dp"
+                android:textColor="@color/white" android:textStyle="bold"
+                android:gravity="center"/>
+            <TextView android:text="Trung Bình" android:padding="8dp"
+                android:textColor="@color/white" android:textStyle="bold"
+                android:gravity="center"/>
+            <TextView android:text="Khó" android:padding="8dp"
+                android:textColor="@color/white" android:textStyle="bold"
+                android:gravity="center"/>
+        </TableRow>
+
+        <!-- Điểm -->
+        <TableRow android:background="#13A5E7">
+            <TextView android:text="Điểm" android:padding="8dp" android:textStyle="bold"/>
+            <TextView android:id="@+id/tv_easy_score" android:padding="8dp" android:gravity="center"/>
+            <TextView android:id="@+id/tv_med_score"  android:padding="8dp" android:gravity="center"/>
+            <TextView android:id="@+id/tv_hard_score" android:padding="8dp" android:gravity="center"/>
+        </TableRow>
+
+        <!-- Thời gian -->
+        <TableRow android:background="#1CA3E0">
+            <TextView android:text="Thời gian" android:padding="8dp" android:textStyle="bold"/>
+            <TextView android:id="@+id/tv_easy_time" android:padding="8dp" android:gravity="center"/>
+            <TextView android:id="@+id/tv_med_time"  android:padding="8dp" android:gravity="center"/>
+            <TextView android:id="@+id/tv_hard_time" android:padding="8dp" android:gravity="center"/>
+        </TableRow>
+
+        <!-- Số lần gợi ý -->
+        <TableRow android:background="#13A5E7">
+            <TextView android:text="Gợi ý" android:padding="8dp" android:textStyle="bold"/>
+            <TextView android:id="@+id/tv_easy_hints" android:padding="8dp" android:gravity="center"/>
+            <TextView android:id="@+id/tv_med_hints"  android:padding="8dp" android:gravity="center"/>
+            <TextView android:id="@+id/tv_hard_hints" android:padding="8dp" android:gravity="center"/>
+        </TableRow>
+    </TableLayout>
+</LinearLayout>

@@ -1,14 +1,86 @@
 <?xml version="1.0" encoding="utf-8"?>
-<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:tools="http://schemas.android.com/tools"
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context=".ui.GameFragment">
+    android:orientation="vertical"
+    android:background="#1FAAE9">
 
-    <!-- TODO: Update blank fragment layout -->
-    <TextView
+    <!-- Toolbar -->
+    <include layout="@layout/toolbar_sudoku"/>
+
+    <!-- Timer -->
+    <LinearLayout
         android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:text="@string/hello_blank_fragment" />
+        android:layout_height="wrap_content"
+        android:orientation="horizontal"
+        android:gravity="center_vertical"
+        android:padding="8dp">
 
-</FrameLayout>
+        <TextView android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Thời gian: "
+            android:textSize="16sp"/>
+
+        <Chronometer android:id="@+id/chronometer"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:textSize="16sp"
+            android:textStyle="bold"/>
+
+        <View android:layout_width="0dp" android:layout_height="1dp"
+            android:layout_weight="1"/>
+
+        <Button
+            android:id="@+id/btn_pause"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:paddingHorizontal="12dp"
+            android:text="⏸"
+            android:textSize="18sp" />
+    </LinearLayout>
+
+    <!-- Bàn cờ Sudoku (custom view) -->
+    <com.tbt65133334.sudokuapp.view.SudokuBoardView
+        android:id="@+id/sudoku_board"
+        android:layout_width="match_parent"
+        android:layout_height="0dp"
+        android:layout_weight="1"
+        android:layout_margin="8dp"/>
+
+    <!-- Thanh công cụ game -->
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal"
+        android:padding="8dp"
+        android:gravity="center">
+
+        <Button android:id="@+id/btn_hint"
+            android:layout_width="0dp" android:layout_height="48dp"
+            android:layout_weight="1" android:text="Gợi ý: 3/3"
+            android:textSize="13sp" android:layout_marginEnd="4dp"/>
+
+        <Button android:id="@+id/btn_auto_solve"
+            android:layout_width="0dp" android:layout_height="48dp"
+            android:layout_weight="1" android:text="Tự động giải"
+            android:textSize="13sp" android:layout_marginEnd="4dp"/>
+
+        <Button android:id="@+id/btn_check"
+            android:layout_width="0dp" android:layout_height="48dp"
+            android:layout_weight="1" android:text="Kiểm tra"
+            android:textSize="13sp"/>
+    </LinearLayout>
+
+    <!-- Bàn phím ảo (ẩn mặc định) -->
+    <LinearLayout
+        android:id="@+id/keyboard_layout"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal"
+        android:padding="8dp"
+        android:visibility="gone"
+        android:background="#DB0C0C">
+
+        <!-- Nút 1-9 + Xóa (tạo bằng code trong Fragment) -->
+    </LinearLayout>
+</LinearLayout>
