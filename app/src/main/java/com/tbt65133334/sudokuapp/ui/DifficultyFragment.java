@@ -1,4 +1,4 @@
-package com.tbt65133334.appsudoku;
+package com.tbt65133334.sudokuapp.ui;
 
 import android.os.Bundle;
 
@@ -8,12 +8,14 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 
+import com.tbt65133334.sudokuapp.R;
+
 /**
  * A simple {@link Fragment} subclass.
- * Use the {@link GuideFragment#newInstance} factory method to
+ * Use the {@link DifficultyFragment#newInstance} factory method to
  * create an instance of this fragment.
  */
-public class GuideFragment extends Fragment {
+public class DifficultyFragment extends Fragment {
 
     // TODO: Rename parameter arguments, choose names that match
     // the fragment initialization parameters, e.g. ARG_ITEM_NUMBER
@@ -24,7 +26,7 @@ public class GuideFragment extends Fragment {
     private String mParam1;
     private String mParam2;
 
-    public GuideFragment() {
+    public DifficultyFragment() {
         // Required empty public constructor
     }
 
@@ -34,11 +36,11 @@ public class GuideFragment extends Fragment {
      *
      * @param param1 Parameter 1.
      * @param param2 Parameter 2.
-     * @return A new instance of fragment GuideFragment.
+     * @return A new instance of fragment DifficultyFragment.
      */
     // TODO: Rename and change types and number of parameters
-    public static GuideFragment newInstance(String param1, String param2) {
-        GuideFragment fragment = new GuideFragment();
+    public static DifficultyFragment newInstance(String param1, String param2) {
+        DifficultyFragment fragment = new DifficultyFragment();
         Bundle args = new Bundle();
         args.putString(ARG_PARAM1, param1);
         args.putString(ARG_PARAM2, param2);
@@ -59,6 +61,6 @@ public class GuideFragment extends Fragment {
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         // Inflate the layout for this fragment
-        return inflater.inflate(R.layout.fragment_guide, container, false);
+        return inflater.inflate(R.layout.fragment_difficulty, container, false);
     }
 }

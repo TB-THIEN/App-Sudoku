@@ -1,14 +1,5 @@
 <resources>
-    <string name="app_name">Sudoku</string>
-    <string name="easy">Dễ</string>
-    <string name="medium">Trung Bình</string>
-    <string name="hard">Khó</string>
-    <string name="hint">Gợi ý</string>
-    <string name="solve">Tự giải</string>
-    <string name="pause">Tạm dừng</string>
-    <string name="resume">Tiếp tục</string>
-    <string name="guide">Hướng dẫn</string>
-    <string name="best_score">Điểm cao nhất</string>
-    <string name="win_title">🎉 Chiến thắng!</string>
-    <string name="back_home">Về trang chủ</string>
+    <string name="app_name">SudokuApp</string>
+    <!-- TODO: Remove or change this placeholder text -->
+    <string name="hello_blank_fragment">Hello blank fragment</string>
 </resources>

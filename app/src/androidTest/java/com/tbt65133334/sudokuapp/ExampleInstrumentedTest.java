@@ -1,4 +1,4 @@
-package com.tbt65133334.appsudoku;
+package com.tbt65133334.sudokuapp;
 
 import android.content.Context;
 
@@ -21,6 +21,6 @@ public class ExampleInstrumentedTest {
     public void useAppContext() {
         // Context of the app under test.
         Context appContext = InstrumentationRegistry.getInstrumentation().getTargetContext();
-        assertEquals("com.tbt65133334.appsudoku", appContext.getPackageName());
+        assertEquals("com.tbt65133334.sudokuapp", appContext.getPackageName());
     }
 }

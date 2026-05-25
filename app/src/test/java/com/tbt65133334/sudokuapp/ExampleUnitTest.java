@@ -1,4 +1,4 @@
-package com.tbt65133334.appsudoku;
+package com.tbt65133334.sudokuapp;
 
 import org.junit.Test;
 
