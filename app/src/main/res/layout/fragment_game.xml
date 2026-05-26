@@ -55,23 +55,32 @@
         android:padding="8dp"
         android:gravity="center">
 
-        <Button android:id="@+id/btn_hint"
-            android:layout_width="0dp" android:layout_height="48dp"
-            android:layout_weight="1" android:text="Gợi ý: 3/3"
-            android:textSize="13sp" android:layout_marginEnd="4dp"/>
+        <Button
+            android:id="@+id/btn_hint"
+            android:layout_width="0dp"
+            android:layout_height="48dp"
+            android:layout_weight="1"
+            android:text="Gợi ý: 3/3"
+            android:textSize="13sp"
+            android:layout_marginEnd="4dp"/>
 
         <Button android:id="@+id/btn_auto_solve"
-            android:layout_width="0dp" android:layout_height="48dp"
-            android:layout_weight="1" android:text="Tự động giải"
-            android:textSize="13sp" android:layout_marginEnd="4dp"/>
+            android:layout_width="0dp"
+            android:layout_height="48dp"
+            android:layout_weight="1"
+            android:text="Tự động giải"
+            android:textSize="13sp"
+            android:layout_marginEnd="4dp"/>
 
         <Button android:id="@+id/btn_check"
-            android:layout_width="0dp" android:layout_height="48dp"
-            android:layout_weight="1" android:text="Kiểm tra"
+            android:layout_width="0dp"
+            android:layout_height="48dp"
+            android:layout_weight="1"
+            android:text="Kiểm tra: 10/10"
             android:textSize="13sp"/>
     </LinearLayout>
 
-    <!-- Bàn phím ảo (ẩn mặc định) -->
+    <!-- Bàn phím ảo -->
     <LinearLayout
         android:id="@+id/keyboard_layout"
         android:layout_width="match_parent"
@@ -80,7 +89,5 @@
         android:padding="8dp"
         android:visibility="gone"
         android:background="#DB0C0C">
-
-        <!-- Nút 1-9 + Xóa (tạo bằng code trong Fragment) -->
     </LinearLayout>
 </LinearLayout>
