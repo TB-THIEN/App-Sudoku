@@ -394,7 +394,7 @@ public class GameFragment extends Fragment {
         int  baseScore = difficulty == 0 ? BASE_SCORE_EASY
                 : difficulty == 1 ? BASE_SCORE_MEDIUM : BASE_SCORE_HARD;
         int  score     = (int) Math.max(0, baseScore - seconds * 2
-                - hintsUsed * 200 - checksUsed * 100);
+                - hintsUsed * 200);
 
         db.updateBestScore(difficulty, score, (int) seconds, hintsUsed);
         showWinDialog(score, seconds);
