@@ -35,7 +35,13 @@ public class GameFragment extends Fragment {
 
     private SudokuBoardView boardView;
     private Chronometer     chronometer;
-    private Button          btnHint, btnAutoSolve, btnCheck, btnPause;
+    private ImageButton     btnPause;           // ImageButton trong XML
+    private TextView        tvHint;             // TextView bên trong layout_hint
+    private TextView        tvAutoSolve;        // TextView bên trong layout_auto_solve
+    private TextView        tvCheck;            // TextView bên trong layout_check
+    private LinearLayout    layoutHint;         // LinearLayout clickable
+    private LinearLayout    layoutAutoSolve;
+    private LinearLayout    layoutCheck;
     private View            btnHome, btnBack;
     private LinearLayout    keyboardLayout;
 
@@ -55,6 +61,7 @@ public class GameFragment extends Fragment {
 
     private SudokuDatabase db;
     private DatabaseReference puzzlesRef;
+    private String username;
 
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater,
@@ -65,17 +72,26 @@ public class GameFragment extends Fragment {
         maxHints   = difficulty == 0 ? MAX_HINTS_EASY
                 : difficulty == 1 ? MAX_HINTS_MEDIUM : MAX_HINTS_HARD;
 
+        // Lấy username từ MainActivity
+        username   = ((MainActivity) requireActivity()).getCurrentUsername();
+
         db         = new SudokuDatabase(requireContext());
         puzzlesRef = FirebaseDatabase.getInstance().getReference("puzzles")
                 .child(difficultyKey(difficulty));
 
+        // ── Ánh xạ view đúng kiểu ──────────────────────────────────────────
         boardView      = v.findViewById(R.id.sudoku_board);
         chronometer    = v.findViewById(R.id.chronometer);
-        btnHint        = v.findViewById(R.id.btn_hint);
-        btnAutoSolve   = v.findViewById(R.id.btn_auto_solve);
-        btnCheck       = v.findViewById(R.id.btn_check);
-        btnPause       = v.findViewById(R.id.btn_pause);
+        btnPause       = v.findViewById(R.id.btn_pause);       // ImageButton ✓
         keyboardLayout = v.findViewById(R.id.keyboard_layout);
+
+        // Các nút hành động: lấy LinearLayout (click) + TextView (hiển thị text)
+        layoutHint      = v.findViewById(R.id.layout_hint);
+        layoutAutoSolve = v.findViewById(R.id.layout_auto_solve);
+        layoutCheck     = v.findViewById(R.id.layout_check);
+        tvHint          = v.findViewById(R.id.btn_hint);       // TextView trong layout_hint
+        tvAutoSolve     = v.findViewById(R.id.btn_auto_solve);
+        tvCheck         = v.findViewById(R.id.btn_check);
 
         setupToolbar(v);
         setupKeyboard();
@@ -88,14 +104,16 @@ public class GameFragment extends Fragment {
         return v;
     }
 
-    //Difficulty key
+    // ── Difficulty key ────────────────────────────────────────────────────────
+
     private String difficultyKey(int diff) {
         if (diff == 0) return "easy";
         if (diff == 1) return "medium";
         return "hard";
     }
 
-    //Quản lý danh sách đề
+    // ── Quản lý danh sách đề ─────────────────────────────────────────────────
+
     private void resetRemainingKeys() {
         remainingKeys.clear();
         for (int i = 1; i <= TOTAL_PUZZLES; i++) {
@@ -104,10 +122,7 @@ public class GameFragment extends Fragment {
     }
 
     private String pickNextKey() {
-        // Nếu hết đề → reset chu kỳ mới
-        if (remainingKeys.isEmpty()) {
-            resetRemainingKeys();
-        }
+        if (remainingKeys.isEmpty()) resetRemainingKeys();
 
         List<String> candidates = new ArrayList<>(remainingKeys);
         if (candidates.size() > 1 && currentPuzzleKey != null) {
@@ -119,7 +134,8 @@ public class GameFragment extends Fragment {
         return chosen;
     }
 
-    //Load đề từ Firebase
+    // ── Load đề từ Firebase ───────────────────────────────────────────────────
+
     private void loadNextPuzzle() {
         currentPuzzleKey = pickNextKey();
         Log.d(TAG, "Loading puzzle key=" + currentPuzzleKey
@@ -143,7 +159,6 @@ public class GameFragment extends Fragment {
                                     "Dữ liệu đề bài bị lỗi!", Toast.LENGTH_SHORT).show();
                             return;
                         }
-
                         applyPuzzle(puzzleStr, solutionStr);
                     }
 
@@ -179,41 +194,46 @@ public class GameFragment extends Fragment {
         chronometer.setBase(SystemClock.elapsedRealtime());
         chronometer.start();
         isPaused = false;
-        btnPause.setText("⏸");
+        btnPause.setImageResource(android.R.drawable.ic_media_pause);
     }
 
-    //Toolbar
+    // ── Toolbar ───────────────────────────────────────────────────────────────
+
     private void setupToolbar(View v) {
         btnHome = v.findViewById(R.id.btn_home);
         btnBack = v.findViewById(R.id.btn_back);
-
         btnHome.setOnClickListener(b -> ((MainActivity) requireActivity()).goHome());
         btnBack.setOnClickListener(b ->
                 requireActivity().getSupportFragmentManager().popBackStack());
     }
 
-    //Bật/tắt tương tác
+    // ── Bật/tắt tương tác ────────────────────────────────────────────────────
+
     private void setGameInteractionEnabled(boolean enabled) {
         boardView.setEnabled(enabled);
-        btnHint.setEnabled(enabled);
-        btnCheck.setEnabled(enabled);
-        btnAutoSolve.setEnabled(enabled);
+        layoutHint.setEnabled(enabled);
+        layoutHint.setClickable(enabled);
+        layoutCheck.setEnabled(enabled);
+        layoutCheck.setClickable(enabled);
+        layoutAutoSolve.setEnabled(enabled);
+        layoutAutoSolve.setClickable(enabled);
         btnPause.setEnabled(enabled);
         if (!enabled) keyboardLayout.setVisibility(View.GONE);
     }
 
-    //Timer
+    // ── Timer ─────────────────────────────────────────────────────────────────
+
     private void pauseTimer() {
         if (!isPaused) {
             pauseOffset = SystemClock.elapsedRealtime() - chronometer.getBase();
             chronometer.stop();
             isPaused = true;
-            btnPause.setText("▶");
+            btnPause.setImageResource(android.R.drawable.ic_media_play);
         } else {
             chronometer.setBase(SystemClock.elapsedRealtime() - pauseOffset);
             chronometer.start();
             isPaused = false;
-            btnPause.setText("⏸");
+            btnPause.setImageResource(android.R.drawable.ic_media_pause);
         }
     }
 
@@ -228,7 +248,8 @@ public class GameFragment extends Fragment {
         if (!isPaused && !isGameFinished && !autoSolved) pauseTimer();
     }
 
-    //Bàn phím ảo
+    // ── Bàn phím ảo ──────────────────────────────────────────────────────────
+
     private void setupKeyboard() {
         keyboardLayout.removeAllViews();
         for (int num = 1; num <= 9; num++) {
@@ -272,11 +293,12 @@ public class GameFragment extends Fragment {
         checkWinCondition();
     }
 
-    //Button
+    // ── Buttons ───────────────────────────────────────────────────────────────
+
     private void setupButtons() {
         btnPause.setOnClickListener(b -> pauseTimer());
 
-        btnHint.setOnClickListener(b -> {
+        layoutHint.setOnClickListener(b -> {
             if (isPaused || autoSolved || isGameFinished) return;
             if (hintsUsed >= maxHints) {
                 Toast.makeText(requireContext(), "Hết lượt gợi ý!", Toast.LENGTH_SHORT).show();
@@ -285,7 +307,7 @@ public class GameFragment extends Fragment {
             giveHint();
         });
 
-        btnAutoSolve.setOnClickListener(b ->
+        layoutAutoSolve.setOnClickListener(b ->
                 new AlertDialog.Builder(requireContext())
                         .setTitle("Tự động giải")
                         .setMessage("Kết quả ván này sẽ không được tính điểm.\nBạn vẫn muốn tiếp tục?")
@@ -293,22 +315,23 @@ public class GameFragment extends Fragment {
                         .setNegativeButton("Hủy", null)
                         .show());
 
-        btnCheck.setOnClickListener(b -> checkAllErrors());
+        layoutCheck.setOnClickListener(b -> checkAllErrors());
     }
 
-    //Gợi ý
+    // ── Gợi ý ─────────────────────────────────────────────────────────────────
+
     private void giveHint() {
         List<int[]> empty = new ArrayList<>();
         for (int r = 0; r < 9; r++)
-            for (int c = 0; c < 9; c++)   // ← sửa bug: c < 9 (thay vì r < 9)
+            for (int c = 0; c < 9; c++)
                 if (!puzzle.isGiven(r, c) && currentBoard[r][c] == 0)
                     empty.add(new int[]{r, c});
 
         if (empty.isEmpty()) return;
 
-        int[] cell = empty.get(new Random().nextInt(empty.size()));
-        int row = cell[0], col = cell[1];
-        int answer = puzzle.getSolution()[row][col];
+        int[] cell  = empty.get(new Random().nextInt(empty.size()));
+        int   row   = cell[0], col = cell[1];
+        int   answer = puzzle.getSolution()[row][col];
 
         currentBoard[row][col] = answer;
         boardView.setNumber(row, col, answer);
@@ -320,7 +343,8 @@ public class GameFragment extends Fragment {
         checkWinCondition();
     }
 
-    //Tự động giải
+    // ── Tự động giải ──────────────────────────────────────────────────────────
+
     private void autoSolve() {
         autoSolved = true;
         chronometer.stop();
@@ -339,7 +363,6 @@ public class GameFragment extends Fragment {
                 .setTitle("Đã tự động giải!")
                 .setMessage("Hệ thống đã điền đáp án.\nVán này không được tính điểm.")
                 .setCancelable(false)
-                // "Đề tiếp theo" → load đề mới từ Firebase
                 .setPositiveButton("Đề tiếp theo", (d, w) -> loadNextPuzzle())
                 .setNegativeButton("Đóng", (d, w) ->
                         Toast.makeText(requireContext(),
@@ -356,7 +379,8 @@ public class GameFragment extends Fragment {
         dlg.show();
     }
 
-    //Kiểm tra lỗi
+    // ── Kiểm tra lỗi ─────────────────────────────────────────────────────────
+
     private void checkAllErrors() {
         if (isPaused || autoSolved || isGameFinished) return;
         if (checksUsed >= MAX_CHECKS) {
@@ -379,7 +403,8 @@ public class GameFragment extends Fragment {
                     boardView.setError(r, c, currentBoard[r][c] != sol[r][c]);
     }
 
-    //Kiểm tra chiến thắng
+    // ── Kiểm tra chiến thắng ──────────────────────────────────────────────────
+
     private void checkWinCondition() {
         if (autoSolved || isGameFinished) return;
         int[][] sol = puzzle.getSolution();
@@ -393,10 +418,13 @@ public class GameFragment extends Fragment {
         long seconds   = getElapsedSeconds();
         int  baseScore = difficulty == 0 ? BASE_SCORE_EASY
                 : difficulty == 1 ? BASE_SCORE_MEDIUM : BASE_SCORE_HARD;
-        int  score     = (int) Math.max(0, baseScore - seconds * 2
-                - hintsUsed * 200);
+        int  score     = (int) Math.max(0, baseScore - seconds * 2 - hintsUsed * 200);
 
-        db.updateBestScore(difficulty, score, (int) seconds, hintsUsed);
+        // Lưu thành tích theo username
+        if (username != null && !username.isEmpty()) {
+            db.updateBestScore(username, difficulty, score, (int) seconds, hintsUsed);
+        }
+
         showWinDialog(score, seconds);
     }
 
@@ -419,13 +447,13 @@ public class GameFragment extends Fragment {
                 .show();
     }
 
-    //Cập nhật nút
+
     private void updateHintButton() {
-        btnHint.setText("Gợi ý: " + (maxHints - hintsUsed) + "/" + maxHints);
+        tvHint.setText("Gợi ý: " + (maxHints - hintsUsed) + "/" + maxHints);
     }
 
     private void updateCheckButton() {
-        btnCheck.setText("Kiểm tra: " + (MAX_CHECKS - checksUsed) + "/" + MAX_CHECKS);
+        tvCheck.setText("Kiểm tra:\n" + (MAX_CHECKS - checksUsed) + "/" + MAX_CHECKS);
     }
 
     private int[][] copyGrid(int[][] src) {

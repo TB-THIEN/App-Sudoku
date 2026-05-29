@@ -5,9 +5,13 @@ import android.view.*;
 import android.widget.TextView;
 import androidx.annotation.NonNull;
 import androidx.fragment.app.Fragment;
+
 import com.tbt65133334.sudokuapp.MainActivity;
 import com.tbt65133334.sudokuapp.R;
 import com.tbt65133334.sudokuapp.database.SudokuDatabase;
+import com.tbt65133334.sudokuapp.model.GameStats;
+
+import java.util.List;
 
 public class StartFragment extends Fragment {
 
@@ -21,26 +25,30 @@ public class StartFragment extends Fragment {
         v.findViewById(R.id.btn_back).setOnClickListener(b ->
                 requireActivity().getSupportFragmentManager().popBackStack());
 
+        String username = ((MainActivity) requireActivity()).getCurrentUsername();
         SudokuDatabase db = new SudokuDatabase(requireContext());
-        int[][] stats = new int[3][];
-        for (int i = 0; i < 3; i++) stats[i] = db.getStats(i);
 
-        // Điền dữ liệu vào bảng
-        String[] scoreIds = {String.valueOf(stats[0][0]), String.valueOf(stats[1][0]), String.valueOf(stats[2][0])};
-        ((TextView) v.findViewById(R.id.tv_easy_score)).setText(scoreIds[0]);
-        ((TextView) v.findViewById(R.id.tv_med_score)).setText(scoreIds[1]);
-        ((TextView) v.findViewById(R.id.tv_hard_score)).setText(scoreIds[2]);
+        // Lấy thành tích cho cả 3 độ khó của user hiện tại
+        List<GameStats> statsList = db.getAllStats(username != null ? username : "");
 
-        for (int i = 0; i < 3; i++) {
-            int s = stats[i][1]; // giây
-            String time = s == 0 ? "–" : String.format("%02d:%02d", s / 60, s % 60);
-            int tvId = i == 0 ? R.id.tv_easy_time : i == 1 ? R.id.tv_med_time : R.id.tv_hard_time;
-            ((TextView) v.findViewById(tvId)).setText(time);
-        }
+        GameStats easy   = statsList.get(0);
+        GameStats medium = statsList.get(1);
+        GameStats hard   = statsList.get(2);
 
-        ((TextView) v.findViewById(R.id.tv_easy_hints)).setText(String.valueOf(stats[0][2]));
-        ((TextView) v.findViewById(R.id.tv_med_hints)).setText(String.valueOf(stats[1][2]));
-        ((TextView) v.findViewById(R.id.tv_hard_hints)).setText(String.valueOf(stats[2][2]));
+        // Điểm cao nhất
+        ((TextView) v.findViewById(R.id.tv_easy_score)).setText(String.valueOf(easy.getBestScore()));
+        ((TextView) v.findViewById(R.id.tv_med_score)).setText(String.valueOf(medium.getBestScore()));
+        ((TextView) v.findViewById(R.id.tv_hard_score)).setText(String.valueOf(hard.getBestScore()));
+
+        // Thời gian tốt nhất
+        ((TextView) v.findViewById(R.id.tv_easy_time)).setText(easy.getBestTimeFormatted());
+        ((TextView) v.findViewById(R.id.tv_med_time)).setText(medium.getBestTimeFormatted());
+        ((TextView) v.findViewById(R.id.tv_hard_time)).setText(hard.getBestTimeFormatted());
+
+        // Số lần gợi ý khi đạt best
+        ((TextView) v.findViewById(R.id.tv_easy_hints)).setText(String.valueOf(easy.getBestHints()));
+        ((TextView) v.findViewById(R.id.tv_med_hints)).setText(String.valueOf(medium.getBestHints()));
+        ((TextView) v.findViewById(R.id.tv_hard_hints)).setText(String.valueOf(hard.getBestHints()));
 
         return v;
     }

@@ -6,7 +6,7 @@
     android:orientation="vertical"
     android:gravity="center"
     android:padding="32dp"
-    android:background="#1FAAE9">
+    android:background="@color/background">
 
     <TextView
         android:layout_width="wrap_content"
@@ -14,22 +14,25 @@
         android:text="SUDOKU"
         android:textSize="40sp"
         android:textStyle="bold"
-        android:textColor="#FFFFFF"
+        android:fontFamily="sans-serif-black"
+        android:letterSpacing="0.08"
+        android:textColor="@color/text_main"
         android:layout_marginBottom="8dp"/>
 
     <TextView
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:text="Đăng nhập để tiếp tục"
-        android:textSize="16sp"
-        android:textColor="#E0F7FA"
+        android:textSize="15sp"
+        android:textColor="@color/text_secondary"
         android:layout_marginBottom="40dp"/>
 
     <androidx.cardview.widget.CardView
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         app:cardCornerRadius="16dp"
-        app:cardElevation="8dp"
+        app:cardElevation="4dp"
+        app:cardBackgroundColor="@color/white"
         android:layout_marginBottom="16dp">
 
         <LinearLayout
@@ -43,8 +46,8 @@
                 android:layout_height="wrap_content"
                 android:text="Tài khoản"
                 android:textSize="14sp"
-                android:textColor="#555555"
-                android:layout_marginBottom="4dp"/>
+                android:textColor="@color/text_secondary"
+                android:layout_marginBottom="6dp"/>
 
             <EditText
                 android:id="@+id/et_username"
@@ -53,9 +56,9 @@
                 android:hint="Nhập tài khoản"
                 android:inputType="text"
                 android:background="@drawable/edittext_bg"
-                android:paddingStart="12dp"
-                android:paddingEnd="12dp"
-                android:textSize="16sp"
+                android:paddingStart="16dp"
+                android:paddingEnd="16dp"
+                android:textSize="15sp"
                 android:layout_marginBottom="16dp"/>
 
             <TextView
@@ -63,8 +66,8 @@
                 android:layout_height="wrap_content"
                 android:text="Mật khẩu"
                 android:textSize="14sp"
-                android:textColor="#555555"
-                android:layout_marginBottom="4dp"/>
+                android:textColor="@color/text_secondary"
+                android:layout_marginBottom="6dp"/>
 
             <EditText
                 android:id="@+id/et_password"
@@ -73,30 +76,29 @@
                 android:hint="Nhập mật khẩu"
                 android:inputType="textPassword"
                 android:background="@drawable/edittext_bg"
-                android:paddingStart="12dp"
-                android:paddingEnd="12dp"
-                android:textSize="16sp"
+                android:paddingStart="16dp"
+                android:paddingEnd="16dp"
+                android:textSize="15sp"
                 android:layout_marginBottom="8dp"/>
 
             <TextView
                 android:id="@+id/tv_error"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:text=""
                 android:textColor="#D32F2F"
                 android:textSize="13sp"
                 android:layout_marginBottom="16dp"
                 android:visibility="gone"/>
 
-            <Button
+            <androidx.appcompat.widget.AppCompatButton
                 android:id="@+id/btn_login"
                 android:layout_width="match_parent"
                 android:layout_height="52dp"
                 android:text="Đăng nhập"
                 android:textSize="16sp"
                 android:textStyle="bold"
-                android:backgroundTint="#1976D2"
-                android:textColor="#FFFFFF"/>
+                android:background="@drawable/btn_black_round"
+                android:textColor="@color/white"/>
 
         </LinearLayout>
     </androidx.cardview.widget.CardView>
