@@ -28,10 +28,18 @@ public class MainActivity extends AppCompatActivity {
     public void onLoginSuccess(String username) {
         this.currentUsername = username;
         Log.d(TAG, "Đăng nhập thành công: " + username);
-        // Xóa toàn bộ back-stack rồi vào HomeFragment
         getSupportFragmentManager().popBackStack(null,
                 androidx.fragment.app.FragmentManager.POP_BACK_STACK_INCLUSIVE);
         navigateTo(new HomeFragment(), false);
+    }
+
+    public void onLogout() {
+        this.currentUsername = null;
+        Log.d(TAG, "Đã đăng xuất");
+        // Xóa toàn bộ back-stack, quay về màn hình đăng nhập
+        getSupportFragmentManager().popBackStack(null,
+                androidx.fragment.app.FragmentManager.POP_BACK_STACK_INCLUSIVE);
+        navigateTo(new LoginFragment(), false);
     }
 
     public String getCurrentUsername() {

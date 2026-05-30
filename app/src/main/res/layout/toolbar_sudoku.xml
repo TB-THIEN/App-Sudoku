@@ -7,6 +7,7 @@
     android:background="@android:color/transparent"
     android:paddingHorizontal="16dp">
 
+    <!-- Nút Back -->
     <ImageButton
         android:id="@+id/btn_back"
         android:layout_width="40dp"
@@ -19,6 +20,7 @@
         app:layout_constraintTop_toTopOf="parent"
         app:layout_constraintBottom_toBottomOf="parent"/>
 
+    <!-- Tiêu đề giữa -->
     <TextView
         android:id="@+id/toolbar_title"
         android:layout_width="wrap_content"
@@ -34,6 +36,7 @@
         app:layout_constraintTop_toTopOf="parent"
         app:layout_constraintBottom_toBottomOf="parent"/>
 
+    <!-- Nút Home -->
     <ImageButton
         android:id="@+id/btn_home"
         android:layout_width="40dp"
@@ -42,7 +45,6 @@
         android:src="@android:drawable/ic_menu_compass"
         app:tint="@color/text_main"
         android:contentDescription="Home"
-        android:visibility="gone"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintTop_toTopOf="parent"
         app:layout_constraintBottom_toBottomOf="parent"/>

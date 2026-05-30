@@ -13,9 +13,9 @@ import com.tbt65133334.sudokuapp.R;
 
 public class LoginFragment extends Fragment {
 
-    private EditText etUsername, etPassword;
-    private TextView tvError;
-    private Button btnLogin;
+    private EditText    etUsername, etPassword;
+    private TextView    tvError;
+    private Button      btnLogin;
     private ProgressBar progressBar;
 
     private DatabaseReference accountsRef;
@@ -35,10 +35,13 @@ public class LoginFragment extends Fragment {
 
         btnLogin.setOnClickListener(b -> attemptLogin());
 
+        v.findViewById(R.id.tv_go_register).setOnClickListener(b ->
+                ((MainActivity) requireActivity())
+                        .navigateTo(new RegisterFragment(), true));
+
         return v;
     }
 
-    //Đăng nhập
     private void attemptLogin() {
         String username = etUsername.getText().toString().trim();
         String password = etPassword.getText().toString().trim();
@@ -47,47 +50,39 @@ public class LoginFragment extends Fragment {
 
         setLoading(true);
 
-        accountsRef.child(username).addListenerForSingleValueEvent(new ValueEventListener() {
-            @Override
-            public void onDataChange(@NonNull DataSnapshot snapshot) {
-                setLoading(false);
-                if (!snapshot.exists()) {
-                    showError("Tài khoản không tồn tại!");
-                    return;
-                }
-                String savedPwd = snapshot.child("password").getValue(String.class);
-                if (password.equals(savedPwd)) {
-                    ((MainActivity) requireActivity()).onLoginSuccess(username);
-                } else {
-                    showError("Mật khẩu không đúng!");
-                }
-            }
+        accountsRef.child(username)
+                .addListenerForSingleValueEvent(new ValueEventListener() {
+                    @Override
+                    public void onDataChange(@NonNull DataSnapshot snapshot) {
+                        setLoading(false);
+                        if (!snapshot.exists()) {
+                            showError("Tài khoản không tồn tại!"); return;
+                        }
+                        String savedPwd = snapshot.child("password").getValue(String.class);
+                        if (password.equals(savedPwd)) {
+                            ((MainActivity) requireActivity()).onLoginSuccess(username);
+                        } else {
+                            showError("Mật khẩu không đúng!");
+                        }
+                    }
 
-            @Override
-            public void onCancelled(@NonNull DatabaseError error) {
-                setLoading(false);
-                showError("Lỗi kết nối: " + error.getMessage());
-            }
-        });
+                    @Override
+                    public void onCancelled(@NonNull DatabaseError error) {
+                        setLoading(false);
+                        showError("Lỗi kết nối: " + error.getMessage());
+                    }
+                });
     }
 
     private boolean validate(String username, String password) {
         if (TextUtils.isEmpty(username)) {
-            showError("Vui lòng nhập tài khoản!");
-            return false;
-        }
-        if (username.contains(".") || username.contains("#") ||
-                username.contains("$") || username.contains("[") || username.contains("]")) {
-            showError("Tài khoản không được chứa ký tự đặc biệt: . # $ [ ]");
-            return false;
+            showError("Vui lòng nhập tên đăng nhập!"); return false;
         }
         if (TextUtils.isEmpty(password)) {
-            showError("Vui lòng nhập mật khẩu!");
-            return false;
+            showError("Vui lòng nhập mật khẩu!"); return false;
         }
         if (password.length() < 6) {
-            showError("Mật khẩu phải có ít nhất 6 ký tự!");
-            return false;
+            showError("Mật khẩu phải có ít nhất 6 ký tự!"); return false;
         }
         tvError.setVisibility(View.GONE);
         return true;

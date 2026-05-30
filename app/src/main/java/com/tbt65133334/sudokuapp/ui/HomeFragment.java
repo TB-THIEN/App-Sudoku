@@ -7,8 +7,6 @@ import androidx.annotation.NonNull;
 import androidx.fragment.app.Fragment;
 import com.tbt65133334.sudokuapp.MainActivity;
 import com.tbt65133334.sudokuapp.R;
-import com.tbt65133334.sudokuapp.ui.DifficultyFragment;
-import com.tbt65133334.sudokuapp.ui.StartFragment;
 
 public class HomeFragment extends Fragment {
 
@@ -25,6 +23,8 @@ public class HomeFragment extends Fragment {
 
         v.findViewById(R.id.btn_help).setOnClickListener(btn -> showHelp());
 
+        v.findViewById(R.id.btn_logout).setOnClickListener(btn -> showLogoutConfirm());
+
         return v;
     }
 
@@ -39,6 +39,16 @@ public class HomeFragment extends Fragment {
                         "Gợi ý: tự động điền 1 ô đúng.\n" +
                         "Tự động giải: điền toàn bộ đáp án.")
                 .setPositiveButton("Đã hiểu", null)
+                .show();
+    }
+
+    private void showLogoutConfirm() {
+        new AlertDialog.Builder(requireContext())
+                .setTitle("Đăng xuất")
+                .setMessage("Bạn có chắc muốn đăng xuất không?")
+                .setPositiveButton("Đăng xuất", (d, w) ->
+                        ((MainActivity) requireActivity()).onLogout())
+                .setNegativeButton("Hủy", null)
                 .show();
     }
 }
