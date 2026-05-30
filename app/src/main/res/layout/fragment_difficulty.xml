@@ -10,19 +10,18 @@
         android:id="@+id/toolbar"
         layout="@layout/toolbar_sudoku"/>
 
-    <!-- Khoảng trống lớn giữa toolbar và tiêu đề (như screenshot 2) -->
     <View
         android:id="@+id/spacer"
         android:layout_width="match_parent"
-        android:layout_height="120dp"
+        android:layout_height="80dp"
         app:layout_constraintTop_toBottomOf="@id/toolbar"/>
 
     <TextView
         android:id="@+id/tv_title"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="Chọn chế độ"
-        android:textSize="24sp"
+        android:text="Chọn chế độ chơi"
+        android:textSize="26sp"
         android:textStyle="bold"
         android:textColor="@color/text_main"
         app:layout_constraintTop_toBottomOf="@id/spacer"
@@ -33,9 +32,9 @@
         android:id="@+id/tv_subtitle"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginTop="6dp"
-        android:text="Thử thách trí tuệ theo cấp độ của bạn"
-        android:textSize="14sp"
+        android:layout_marginTop="8dp"
+        android:text="Thử thách trí tuệ theo cách của bạn"
+        android:textSize="15sp"
         android:textColor="@color/text_secondary"
         app:layout_constraintTop_toBottomOf="@id/tv_title"
         app:layout_constraintStart_toStartOf="parent"
@@ -47,23 +46,23 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:orientation="vertical"
-        android:padding="20dp"
+        android:padding="24dp"
         app:layout_constraintTop_toBottomOf="@id/tv_subtitle">
 
         <!-- Dễ -->
         <androidx.cardview.widget.CardView
             android:id="@+id/btn_easy"
             android:layout_width="match_parent"
-            android:layout_height="72dp"
-            android:layout_marginBottom="10dp"
-            app:cardCornerRadius="14dp"
-            app:cardElevation="2dp"
+            android:layout_height="80dp"
+            android:layout_marginBottom="16dp"
+            app:cardCornerRadius="16dp"
+            app:cardElevation="4dp"
             app:cardBackgroundColor="@color/white"
             android:foreground="?attr/selectableItemBackground">
             <RelativeLayout
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
-                android:paddingHorizontal="20dp">
+                android:paddingHorizontal="24dp">
                 <LinearLayout
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
@@ -73,24 +72,24 @@
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:text="CẤP ĐỘ 01"
-                        android:textSize="11sp"
+                        android:textSize="12sp"
                         android:textStyle="bold"
-                        android:textColor="#0284C7"/>
+                        android:textColor="@color/level_easy"/>
                     <TextView
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:text="Dễ"
-                        android:textSize="18sp"
+                        android:textSize="20sp"
                         android:textStyle="bold"
                         android:textColor="@color/text_main"/>
                 </LinearLayout>
                 <ImageView
-                    android:layout_width="18dp"
-                    android:layout_height="18dp"
+                    android:layout_width="24dp"
+                    android:layout_height="24dp"
                     android:layout_alignParentEnd="true"
                     android:layout_centerVertical="true"
                     android:src="@android:drawable/ic_media_play"
-                    app:tint="@color/text_secondary"/>
+                    app:tint="@color/level_easy"/>
             </RelativeLayout>
         </androidx.cardview.widget.CardView>
 
@@ -98,16 +97,16 @@
         <androidx.cardview.widget.CardView
             android:id="@+id/btn_medium"
             android:layout_width="match_parent"
-            android:layout_height="72dp"
-            android:layout_marginBottom="10dp"
-            app:cardCornerRadius="14dp"
-            app:cardElevation="2dp"
+            android:layout_height="80dp"
+            android:layout_marginBottom="16dp"
+            app:cardCornerRadius="16dp"
+            app:cardElevation="4dp"
             app:cardBackgroundColor="@color/white"
             android:foreground="?attr/selectableItemBackground">
             <RelativeLayout
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
-                android:paddingHorizontal="20dp">
+                android:paddingHorizontal="24dp">
                 <LinearLayout
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
@@ -117,24 +116,24 @@
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:text="CẤP ĐỘ 02"
-                        android:textSize="11sp"
+                        android:textSize="12sp"
                         android:textStyle="bold"
-                        android:textColor="#0D9488"/>
+                        android:textColor="@color/level_medium"/>
                     <TextView
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:text="Trung bình"
-                        android:textSize="18sp"
+                        android:textSize="20sp"
                         android:textStyle="bold"
                         android:textColor="@color/text_main"/>
                 </LinearLayout>
                 <ImageView
-                    android:layout_width="18dp"
-                    android:layout_height="18dp"
+                    android:layout_width="24dp"
+                    android:layout_height="24dp"
                     android:layout_alignParentEnd="true"
                     android:layout_centerVertical="true"
                     android:src="@android:drawable/ic_media_play"
-                    app:tint="@color/text_secondary"/>
+                    app:tint="@color/level_medium"/>
             </RelativeLayout>
         </androidx.cardview.widget.CardView>
 
@@ -142,15 +141,15 @@
         <androidx.cardview.widget.CardView
             android:id="@+id/btn_hard"
             android:layout_width="match_parent"
-            android:layout_height="72dp"
-            app:cardCornerRadius="14dp"
-            app:cardElevation="2dp"
+            android:layout_height="80dp"
+            app:cardCornerRadius="16dp"
+            app:cardElevation="4dp"
             app:cardBackgroundColor="@color/white"
             android:foreground="?attr/selectableItemBackground">
             <RelativeLayout
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
-                android:paddingHorizontal="20dp">
+                android:paddingHorizontal="24dp">
                 <LinearLayout
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
@@ -160,24 +159,24 @@
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:text="CẤP ĐỘ 03"
-                        android:textSize="11sp"
+                        android:textSize="12sp"
                         android:textStyle="bold"
-                        android:textColor="#B91C1C"/>
+                        android:textColor="@color/level_hard"/>
                     <TextView
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:text="Khó"
-                        android:textSize="18sp"
+                        android:textSize="20sp"
                         android:textStyle="bold"
                         android:textColor="@color/text_main"/>
                 </LinearLayout>
                 <ImageView
-                    android:layout_width="18dp"
-                    android:layout_height="18dp"
+                    android:layout_width="24dp"
+                    android:layout_height="24dp"
                     android:layout_alignParentEnd="true"
                     android:layout_centerVertical="true"
                     android:src="@android:drawable/ic_media_play"
-                    app:tint="@color/text_secondary"/>
+                    app:tint="@color/level_hard"/>
             </RelativeLayout>
         </androidx.cardview.widget.CardView>
 
@@ -191,6 +190,7 @@
         android:text="By TBT"
         android:textColor="@color/text_secondary"
         android:textSize="13sp"
+        android:textStyle="italic"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"/>

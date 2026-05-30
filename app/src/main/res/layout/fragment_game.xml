@@ -6,19 +6,20 @@
     android:orientation="vertical"
     android:background="@color/background">
 
-    <!-- Toolbar: Back | SUDOKU | Home -->
+    <!-- Toolbar -->
     <include layout="@layout/toolbar_sudoku"/>
 
     <View
         android:layout_width="match_parent"
-        android:layout_height="1dp"
+        android:layout_height="1.5dp"
         android:background="@color/divider_color"/>
 
     <!-- Timer row -->
     <RelativeLayout
         android:layout_width="match_parent"
-        android:layout_height="44dp"
-        android:paddingHorizontal="20dp">
+        android:layout_height="48dp"
+        android:paddingHorizontal="20dp"
+        android:background="@color/white">
 
         <LinearLayout
             android:layout_width="wrap_content"
@@ -38,64 +39,74 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:textColor="@color/text_main"
-                android:textSize="15sp"
+                android:textSize="16sp"
                 android:textStyle="bold"/>
         </LinearLayout>
 
+        <!-- Pause button -->
         <ImageButton
             android:id="@+id/btn_pause"
-            android:layout_width="34dp"
-            android:layout_height="34dp"
+            android:layout_width="38dp"
+            android:layout_height="38dp"
             android:layout_alignParentEnd="true"
             android:layout_centerVertical="true"
             android:background="?attr/selectableItemBackgroundBorderless"
             android:src="@android:drawable/ic_media_pause"
-            app:tint="@color/text_main"/>
+            app:tint="@color/colorPrimary"/>
     </RelativeLayout>
 
-    <!-- Bàn cờ Sudoku - chiếm phần lớn màn hình -->
+    <View
+        android:layout_width="match_parent"
+        android:layout_height="1dp"
+        android:background="@color/divider_color"
+        android:layout_marginBottom="4dp"/>
+
+    <!-- Bàn cờ Sudoku -->
     <com.tbt65133334.sudokuapp.view.SudokuBoardView
         android:id="@+id/sudoku_board"
         android:layout_width="match_parent"
         android:layout_height="0dp"
         android:layout_weight="1"
         android:layout_marginHorizontal="8dp"
-        android:layout_marginVertical="6dp"/>
+        android:layout_marginVertical="8dp"
+        android:elevation="4dp"/>
 
     <!-- 3 nút hành động -->
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:orientation="horizontal"
-        android:paddingHorizontal="12dp"
-        android:paddingBottom="10dp"
-        android:paddingTop="4dp"
+        android:paddingHorizontal="16dp"
+        android:paddingBottom="16dp"
+        android:paddingTop="8dp"
         android:gravity="center">
 
         <!-- Gợi ý -->
         <LinearLayout
             android:id="@+id/layout_hint"
             android:layout_width="0dp"
-            android:layout_height="68dp"
+            android:layout_height="72dp"
             android:layout_weight="1"
-            android:layout_marginEnd="6dp"
-            android:background="@drawable/btn_gray_round"
+            android:layout_marginEnd="8dp"
+            android:background="@drawable/btn_secondary_light_blue"
             android:orientation="vertical"
             android:gravity="center"
             android:clickable="true"
-            android:focusable="true">
+            android:focusable="true"
+            android:elevation="2dp">
             <ImageView
-                android:layout_width="20dp"
-                android:layout_height="20dp"
+                android:layout_width="24dp"
+                android:layout_height="24dp"
                 android:src="@android:drawable/btn_star_big_off"
-                app:tint="@color/text_main"/>
+                app:tint="@color/colorPrimary"/>
             <TextView
                 android:id="@+id/btn_hint"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:text="Gợi ý: 3/3"
-                android:textSize="11sp"
-                android:textColor="@color/text_main"
+                android:textSize="12sp"
+                android:textStyle="bold"
+                android:textColor="@color/colorPrimary"
                 android:layout_marginTop="4dp"/>
         </LinearLayout>
 
@@ -103,26 +114,28 @@
         <LinearLayout
             android:id="@+id/layout_auto_solve"
             android:layout_width="0dp"
-            android:layout_height="68dp"
+            android:layout_height="72dp"
             android:layout_weight="1"
-            android:layout_marginEnd="6dp"
-            android:background="@drawable/btn_gray_round"
+            android:layout_marginEnd="8dp"
+            android:background="@drawable/btn_secondary_light_blue"
             android:orientation="vertical"
             android:gravity="center"
             android:clickable="true"
-            android:focusable="true">
+            android:focusable="true"
+            android:elevation="2dp">
             <ImageView
-                android:layout_width="20dp"
-                android:layout_height="20dp"
+                android:layout_width="24dp"
+                android:layout_height="24dp"
                 android:src="@android:drawable/ic_menu_manage"
-                app:tint="@color/text_main"/>
+                app:tint="@color/colorPrimary"/>
             <TextView
                 android:id="@+id/btn_auto_solve"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:text="Tự động giải"
-                android:textSize="11sp"
-                android:textColor="@color/text_main"
+                android:textSize="12sp"
+                android:textStyle="bold"
+                android:textColor="@color/colorPrimary"
                 android:layout_marginTop="4dp"/>
         </LinearLayout>
 
@@ -130,40 +143,43 @@
         <LinearLayout
             android:id="@+id/layout_check"
             android:layout_width="0dp"
-            android:layout_height="68dp"
+            android:layout_height="72dp"
             android:layout_weight="1"
-            android:background="@drawable/btn_gray_round"
+            android:background="@drawable/btn_secondary_light_blue"
             android:orientation="vertical"
             android:gravity="center"
             android:clickable="true"
-            android:focusable="true">
+            android:focusable="true"
+            android:elevation="2dp">
             <ImageView
-                android:layout_width="20dp"
-                android:layout_height="20dp"
+                android:layout_width="24dp"
+                android:layout_height="24dp"
                 android:src="@android:drawable/checkbox_on_background"
-                app:tint="@color/text_main"/>
+                app:tint="@color/colorPrimary"/>
             <TextView
                 android:id="@+id/btn_check"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:text="Kiểm tra:\n10/10"
-                android:textSize="11sp"
-                android:textColor="@color/text_main"
+                android:textSize="12sp"
+                android:textStyle="bold"
+                android:textColor="@color/colorPrimary"
                 android:gravity="center"
                 android:layout_marginTop="2dp"/>
         </LinearLayout>
     </LinearLayout>
 
-    <!-- Bàn phím ảo (ẩn mặc định) -->
+    <!-- Bàn phím ảo -->
     <LinearLayout
         android:id="@+id/keyboard_layout"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:orientation="horizontal"
-        android:paddingHorizontal="8dp"
-        android:paddingBottom="12dp"
-        android:paddingTop="4dp"
+        android:paddingHorizontal="10dp"
+        android:paddingBottom="16dp"
+        android:paddingTop="8dp"
         android:visibility="gone"
-        android:background="@color/card_bg_light"/>
+        android:background="@color/white"
+        android:elevation="8dp"/>
 
 </LinearLayout>

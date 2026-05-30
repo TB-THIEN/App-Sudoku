@@ -1,8 +1,11 @@
 package com.tbt65133334.sudokuapp.ui;
 
-import android.app.AlertDialog;
+import android.app.Dialog;
+import android.graphics.Color;
+import android.graphics.drawable.ColorDrawable;
 import android.os.Bundle;
 import android.view.*;
+import android.widget.Button;
 import androidx.annotation.NonNull;
 import androidx.fragment.app.Fragment;
 import com.tbt65133334.sudokuapp.MainActivity;
@@ -29,26 +32,41 @@ public class HomeFragment extends Fragment {
     }
 
     private void showHelp() {
-        new AlertDialog.Builder(requireContext())
-                .setTitle("Hướng dẫn")
-                .setMessage("Điền số từ 1-9 vào lưới 9×9 sao cho:\n" +
-                        "• Mỗi hàng không có số trùng\n" +
-                        "• Mỗi cột không có số trùng\n" +
-                        "• Mỗi vùng 3×3 không có số trùng\n\n" +
-                        "Nhấn vào ô → chọn số từ bàn phím bên dưới.\n" +
-                        "Gợi ý: tự động điền 1 ô đúng.\n" +
-                        "Tự động giải: điền toàn bộ đáp án.")
-                .setPositiveButton("Đã hiểu", null)
-                .show();
+        android.app.Dialog dialog = new android.app.Dialog(requireContext());
+        dialog.requestWindowFeature(android.view.Window.FEATURE_NO_TITLE);
+        dialog.setContentView(R.layout.dialog_help);
+
+        if (dialog.getWindow() != null) {
+            dialog.getWindow().setBackgroundDrawable(new android.graphics.drawable.ColorDrawable(android.graphics.Color.TRANSPARENT));
+            dialog.getWindow().setLayout(android.view.ViewGroup.LayoutParams.MATCH_PARENT, android.view.ViewGroup.LayoutParams.WRAP_CONTENT);
+        }
+
+        Button btnClose = dialog.findViewById(R.id.btn_close_help);
+        btnClose.setOnClickListener(v -> dialog.dismiss());
+
+        dialog.show();
     }
 
     private void showLogoutConfirm() {
-        new AlertDialog.Builder(requireContext())
-                .setTitle("Đăng xuất")
-                .setMessage("Bạn có chắc muốn đăng xuất không?")
-                .setPositiveButton("Đăng xuất", (d, w) ->
-                        ((MainActivity) requireActivity()).onLogout())
-                .setNegativeButton("Hủy", null)
-                .show();
+        Dialog dialog = new Dialog(requireContext());
+        dialog.requestWindowFeature(Window.FEATURE_NO_TITLE);
+        dialog.setContentView(R.layout.dialog_logout);
+
+        if (dialog.getWindow() != null) {
+            dialog.getWindow().setBackgroundDrawable(new ColorDrawable(Color.TRANSPARENT));
+            dialog.getWindow().setLayout(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.WRAP_CONTENT);
+        }
+
+        Button btnCancel = dialog.findViewById(R.id.btn_cancel);
+        Button btnConfirm = dialog.findViewById(R.id.btn_confirm_logout);
+
+        btnCancel.setOnClickListener(v -> dialog.dismiss());
+
+        btnConfirm.setOnClickListener(v -> {
+            dialog.dismiss();
+            ((MainActivity) requireActivity()).onLogout();
+        });
+
+        dialog.show();
     }
 }

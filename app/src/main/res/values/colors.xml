@@ -1,13 +1,18 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
-    <color name="colorPrimary">#000000</color>
-    <color name="colorPrimaryDark">#000000</color>
-    <color name="colorAccent">#333333</color>
-    <color name="background">#F8FAFC</color>
-    <color name="white">#FFFFFF</color>
 
-    <color name="text_main">#000000</color>
-    <color name="text_secondary">#64748B</color>
-    <color name="card_bg_light">#F1F5F9</color>
-    <color name="divider_color">#E2E8F0</color>
+    <color name="colorPrimary">#2196F3</color>
+    <color name="colorPrimaryDark">#1976D2</color>
+    <color name="colorAccent">#03A9F4</color>
+    <color name="background">#F0F4F8</color>
+    <color name="white">#FFFFFF</color>
+    <color name="text_main">#1A237E</color>
+    <color name="text_secondary">#78909C</color>
+
+    <color name="card_bg_light">#E3F2FD</color>
+    <color name="divider_color">#BBDEFB</color>
+    <color name="level_easy">#4CAF50</color>
+    <color name="level_medium">#FF9800</color>
+    <color name="level_hard">#F44336</color>
+
 </resources>

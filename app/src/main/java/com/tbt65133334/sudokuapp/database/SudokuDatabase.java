@@ -14,7 +14,7 @@ import java.util.List;
 public class SudokuDatabase extends SQLiteOpenHelper {
 
     private static final String DB_NAME    = "sudoku.db";
-    private static final int    DB_VERSION = 2;          // tăng lên 2 để trigger onUpgrade
+    private static final int    DB_VERSION = 2;
 
     // ── Bảng đề bài ──────────────────────────────────────────────────────────
     public static final String TABLE_PUZZLES  = "puzzles";
@@ -24,7 +24,6 @@ public class SudokuDatabase extends SQLiteOpenHelper {
     public static final String COL_SOLUTION   = "solution";
 
     // ── Bảng thành tích theo username ─────────────────────────────────────────
-    // Primary key: (username, difficulty)  → mỗi user có 3 hàng (dễ/tb/khó)
     public static final String TABLE_STATS    = "stats";
     public static final String COL_USERNAME   = "username";
     public static final String COL_DIFF_KEY   = "difficulty";
@@ -100,10 +99,6 @@ public class SudokuDatabase extends SQLiteOpenHelper {
 
     // ── Thành tích theo username ──────────────────────────────────────────────
 
-    /**
-     * Cập nhật điểm cao nếu score mới > điểm hiện tại.
-     * Nếu chưa có hàng cho (username, difficulty) thì tự động tạo mới.
-     */
     public void updateBestScore(String username, int difficulty,
                                 int score, int timeSeconds, int hints) {
         SQLiteDatabase db = getWritableDatabase();
@@ -116,7 +111,6 @@ public class SudokuDatabase extends SQLiteOpenHelper {
                 null, null, null);
 
         if (!cursor.moveToFirst()) {
-            // Chưa có hàng → INSERT
             cursor.close();
             ContentValues cv = new ContentValues();
             cv.put(COL_USERNAME,   username);
@@ -140,10 +134,6 @@ public class SudokuDatabase extends SQLiteOpenHelper {
         }
     }
 
-    /**
-     * Trả về GameStats của một user + độ khó.
-     * Nếu chưa có thành tích → trả về object với tất cả = 0.
-     */
     public GameStats getStats(String username, int difficulty) {
         SQLiteDatabase db = getReadableDatabase();
         Cursor cursor = db.query(TABLE_STATS,
@@ -162,9 +152,6 @@ public class SudokuDatabase extends SQLiteOpenHelper {
         return stats;
     }
 
-    /**
-     * Trả về thành tích của user cho cả 3 độ khó (index 0/1/2).
-     */
     public List<GameStats> getAllStats(String username) {
         List<GameStats> list = new ArrayList<>();
         for (int i = 0; i < 3; i++) {
