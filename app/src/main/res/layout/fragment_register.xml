@@ -3,7 +3,7 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="@color/background"
+    android:background="@drawable/bg_home"
     android:fillViewport="true">
 
     <LinearLayout
@@ -13,16 +13,19 @@
         android:gravity="center"
         android:padding="32dp">
 
-        <!-- Logo -->
         <TextView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:text="SUDOKU"
-            android:textSize="44sp"
+            android:textSize="50sp"
             android:textStyle="bold"
             android:fontFamily="sans-serif-black"
             android:letterSpacing="0.08"
-            android:textColor="@color/text_main"
+            android:textColor="#FFFFFF"
+            android:shadowColor="#FF000000"
+            android:shadowDx="5"
+            android:shadowDy="5"
+            android:shadowRadius="2"
             android:layout_marginBottom="12dp"/>
 
         <TextView
@@ -30,7 +33,11 @@
             android:layout_height="wrap_content"
             android:text="Tạo tài khoản mới"
             android:textSize="16sp"
-            android:textColor="@color/text_secondary"
+            android:textColor="#CCE2E8F0"
+            android:shadowColor="#CC000000"
+            android:shadowDx="3"
+            android:shadowDy="3"
+            android:shadowRadius="2"
             android:layout_marginBottom="48dp"/>
 
         <androidx.cardview.widget.CardView
@@ -47,7 +54,6 @@
                 android:orientation="vertical"
                 android:padding="28dp">
 
-                <!-- Tên đăng nhập -->
                 <TextView
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
@@ -70,7 +76,6 @@
                     android:textColor="@color/text_main"
                     android:layout_marginBottom="20dp"/>
 
-                <!-- Mật khẩu -->
                 <TextView
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
@@ -93,7 +98,6 @@
                     android:textColor="@color/text_main"
                     android:layout_marginBottom="20dp"/>
 
-                <!-- Xác nhận mật khẩu -->
                 <TextView
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
@@ -126,17 +130,17 @@
                     android:gravity="center"
                     android:visibility="gone"/>
 
-                <!-- Nút Đăng ký -->
                 <androidx.appcompat.widget.AppCompatButton
                     android:id="@+id/btn_register"
                     android:layout_width="match_parent"
-                    android:layout_height="56dp"
+                    android:layout_height="64dp"
                     android:text="Đăng ký"
                     android:textSize="18sp"
                     android:textStyle="bold"
-                    android:background="@drawable/btn_primary_blue"
-                    android:textColor="@color/white"
-                    android:elevation="4dp"/>
+                    android:textAllCaps="false"
+                    android:background="@drawable/bg_btn_play"
+                    android:stateListAnimator="@null"
+                    android:textColor="@drawable/text_color_btn"/>
 
             </LinearLayout>
         </androidx.cardview.widget.CardView>
@@ -147,7 +151,7 @@
             android:layout_height="wrap_content"
             android:visibility="gone"
             android:layout_marginBottom="24dp"
-            android:indeterminateTint="@color/colorPrimary"/>
+            android:indeterminateTint="@color/white"/>
 
         <LinearLayout
             android:layout_width="wrap_content"
@@ -160,7 +164,7 @@
                 android:layout_height="wrap_content"
                 android:text="Đã có tài khoản? "
                 android:textSize="15sp"
-                android:textColor="@color/text_secondary"/>
+                android:textColor="#CCE2E8F0"/>
 
             <TextView
                 android:id="@+id/tv_go_login"
@@ -169,7 +173,7 @@
                 android:text="Đăng nhập ngay"
                 android:textSize="15sp"
                 android:textStyle="bold"
-                android:textColor="@color/colorPrimary"/>
+                android:textColor="#FFFFFF"/>
         </LinearLayout>
 
     </LinearLayout>
