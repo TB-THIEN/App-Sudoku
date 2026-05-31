@@ -164,7 +164,7 @@
                 android:layout_height="wrap_content"
                 android:text="Đã có tài khoản? "
                 android:textSize="15sp"
-                android:textColor="#CCE2E8F0"/>
+                android:textColor="#CC166BDC"/>
 
             <TextView
                 android:id="@+id/tv_go_login"
@@ -173,7 +173,7 @@
                 android:text="Đăng nhập ngay"
                 android:textSize="15sp"
                 android:textStyle="bold"
-                android:textColor="#FFFFFF"/>
+                android:textColor="#1D1B1B"/>
         </LinearLayout>
 
     </LinearLayout>
