@@ -56,7 +56,7 @@ public class GameFragment extends Fragment {
     private DatabaseReference puzzlesRef;
     private SudokuDatabase    db;
 
-    private final List<String> remainingKeys  = new ArrayList<>();
+    private final List<String> remainingKeys    = new ArrayList<>();
     private String             currentPuzzleKey = null;
 
     @Override
@@ -74,7 +74,7 @@ public class GameFragment extends Fragment {
             if (username == null || username.isEmpty()) username = "Guest";
         }
 
-        maxHints  = difficulty == 1 ? MAX_HINTS_MED
+        maxHints = difficulty == 1 ? MAX_HINTS_MED
                 : difficulty == 2 ? MAX_HINTS_HARD : MAX_HINTS_EASY;
 
         puzzlesRef = FirebaseDatabase.getInstance()
@@ -88,15 +88,15 @@ public class GameFragment extends Fragment {
                              @Nullable Bundle savedInstanceState) {
         View v = inflater.inflate(R.layout.fragment_game, container, false);
 
-        boardView      = v.findViewById(R.id.sudoku_board);
-        chronometer    = v.findViewById(R.id.chronometer);
-        tvHint         = v.findViewById(R.id.btn_hint);
-        tvCheck        = v.findViewById(R.id.btn_check);
-        layoutCheck    = v.findViewById(R.id.layout_check);
-        layoutHint     = v.findViewById(R.id.layout_hint);
-        layoutAutoSolve= v.findViewById(R.id.layout_auto_solve);
-        keyboardLayout = v.findViewById(R.id.keyboard_layout);
-        btnPause       = v.findViewById(R.id.btn_pause);
+        boardView       = v.findViewById(R.id.sudoku_board);
+        chronometer     = v.findViewById(R.id.chronometer);
+        tvHint          = v.findViewById(R.id.btn_hint);
+        tvCheck         = v.findViewById(R.id.btn_check);
+        layoutCheck     = v.findViewById(R.id.layout_check);
+        layoutHint      = v.findViewById(R.id.layout_hint);
+        layoutAutoSolve = v.findViewById(R.id.layout_auto_solve);
+        keyboardLayout  = v.findViewById(R.id.keyboard_layout);
+        btnPause        = v.findViewById(R.id.btn_pause);
 
         View btnBack = v.findViewById(R.id.btn_back);
         View btnHome = v.findViewById(R.id.btn_home);
@@ -119,6 +119,7 @@ public class GameFragment extends Fragment {
         return v;
     }
 
+
     private String difficultyKey() {
         if (difficulty == 1) return "medium";
         if (difficulty == 2) return "hard";
@@ -127,7 +128,7 @@ public class GameFragment extends Fragment {
 
     private void resetRemainingKeys() {
         remainingKeys.clear();
-        for (int i = 1; i <= TOTAL_PUZZLES; i++) remainingKeys.add(String.valueOf(i));
+        for (int i = 1; i <= TOTAL_PUZZLES; i++) remainingKeys.add("id_" + i);
     }
 
     private String pickNextKey() {
@@ -136,7 +137,7 @@ public class GameFragment extends Fragment {
         }
 
         List<String> candidates = new ArrayList<>(remainingKeys);
-
+        
         if (candidates.size() > 1 && currentPuzzleKey != null) {
             candidates.remove(currentPuzzleKey);
         }
@@ -160,7 +161,7 @@ public class GameFragment extends Fragment {
                             return;
                         }
 
-                        Object rawPuzzle = snapshot.child("puzzle").getValue();
+                        Object rawPuzzle   = snapshot.child("puzzle").getValue();
                         Object rawSolution = snapshot.child("solution").getValue();
 
                         if (rawPuzzle == null || rawSolution == null) {
@@ -168,14 +169,31 @@ public class GameFragment extends Fragment {
                             return;
                         }
 
-                        String puzzleStr = String.valueOf(rawPuzzle);
-                        String solutionStr = String.valueOf(rawSolution);
+                        String puzzleStr   = String.valueOf(rawPuzzle).trim();
+                        String solutionStr = String.valueOf(rawSolution).trim();
 
-                        if (puzzleStr.startsWith("s")) {
-                            puzzleStr = puzzleStr.substring(1);
+                        // Handle scientific-notation doubles Firebase may return
+                        if (puzzleStr.contains("E") || puzzleStr.contains("e")
+                                || puzzleStr.length() != 81
+                                || solutionStr.contains("E") || solutionStr.contains("e")
+                                || solutionStr.length() != 81) {
+                            try {
+                                double dPuz = Double.parseDouble(puzzleStr);
+                                double dSol = Double.parseDouble(solutionStr);
+                                puzzleStr   = String.format("%.0f", dPuz);
+                                solutionStr = String.format("%.0f", dSol);
+                            } catch (Exception e) {
+                                Log.e(TAG, "Error formatting double: " + e.getMessage());
+                            }
                         }
-                        if (solutionStr.startsWith("s")) {
-                            solutionStr = solutionStr.substring(1);
+
+                        // Strip leading sentinel character used in JSON
+                        if (puzzleStr.startsWith("s"))   puzzleStr   = puzzleStr.substring(1);
+                        if (solutionStr.startsWith("s")) solutionStr = solutionStr.substring(1);
+
+                        if (puzzleStr.length() != 81 || solutionStr.length() != 81) {
+                            loadFromSQLite();
+                            return;
                         }
 
                         applyPuzzle(puzzleStr, solutionStr);
@@ -200,7 +218,7 @@ public class GameFragment extends Fragment {
     }
 
     private void applyPuzzle(String puzzleStr, String solutionStr) {
-        puzzle = new SudokuPuzzle(puzzleStr, solutionStr, difficulty);
+        puzzle       = new SudokuPuzzle(puzzleStr, solutionStr, difficulty);
         currentBoard = copyGrid(puzzle.getPuzzle());
 
         boolean[][] given = new boolean[9][9];
@@ -208,10 +226,15 @@ public class GameFragment extends Fragment {
             for (int c = 0; c < 9; c++)
                 given[r][c] = puzzle.isGiven(r, c);
 
-        boardView.loadPuzzle(currentBoard, given);
+        if (boardView != null) {
+            boardView.clearFocus();
+            if (keyboardLayout != null) keyboardLayout.setVisibility(View.GONE);
+            boardView.loadPuzzle(currentBoard, given);
+            boardView.invalidate();
+        }
 
-        hintsUsed  = 0;
-        checksUsed = 0;
+        hintsUsed    = 0;
+        checksUsed   = 0;
         isGameActive = true;
         isPaused     = false;
         pauseOffset  = 0;
@@ -219,10 +242,13 @@ public class GameFragment extends Fragment {
         updateHintButton();
         updateCheckButton();
 
-        chronometer.setBase(SystemClock.elapsedRealtime());
-        chronometer.start();
-        if (btnPause != null)
+        if (chronometer != null) {
+            chronometer.setBase(SystemClock.elapsedRealtime());
+            chronometer.start();
+        }
+        if (btnPause != null) {
             btnPause.setImageResource(android.R.drawable.ic_media_pause);
+        }
     }
 
     private void togglePause() {
@@ -253,6 +279,7 @@ public class GameFragment extends Fragment {
         if (isGameActive && !isPaused) togglePause();
     }
 
+
     private void setupKeyboard() {
         if (keyboardLayout == null) return;
         keyboardLayout.removeAllViews();
@@ -274,6 +301,7 @@ public class GameFragment extends Fragment {
         LinearLayout.LayoutParams dp =
                 new LinearLayout.LayoutParams(0, LinearLayout.LayoutParams.WRAP_CONTENT, 1f);
         dp.setMargins(2, 2, 2, 2);
+        btnDel.setLayoutParams(dp);
         btnDel.setOnClickListener(b -> onNumberPressed(0));
         keyboardLayout.addView(btnDel);
     }
@@ -358,6 +386,8 @@ public class GameFragment extends Fragment {
                             boardView.setError(r, c, false);
                         }
                     keyboardLayout.setVisibility(View.GONE);
+
+
                 })
                 .setNegativeButton("Hủy", null)
                 .show();
@@ -380,6 +410,7 @@ public class GameFragment extends Fragment {
             else requireActivity().getSupportFragmentManager().popBackStack();
         }
     }
+
 
     private void checkWinCondition() {
         if (!isGameActive || puzzle == null) return;
@@ -439,6 +470,7 @@ public class GameFragment extends Fragment {
         });
     }
 
+
     private void showWinDialog(int score, long seconds) {
         Dialog dialog = new Dialog(requireContext());
         dialog.setContentView(R.layout.dialog_win);
@@ -462,15 +494,17 @@ public class GameFragment extends Fragment {
         if (tvTime   != null) tvTime.setText(time);
         if (tvHints  != null) tvHints.setText(hintsUsed + "/" + maxHints);
         if (tvChecks != null) tvChecks.setText(checksUsed + "/" + MAX_CHECKS);
+
         if (btnClose != null) btnClose.setOnClickListener(v -> {
             dialog.dismiss();
             keyboardLayout.setVisibility(View.GONE);
         });
 
-        if (btnNext  != null) btnNext.setOnClickListener(v -> {
+        if (btnNext != null) btnNext.setOnClickListener(v -> {
             dialog.dismiss();
             loadNextPuzzle();
         });
+
         dialog.setCancelable(false);
         dialog.show();
     }
@@ -499,6 +533,7 @@ public class GameFragment extends Fragment {
         dialog.setCancelable(false);
         dialog.show();
     }
+
 
     private void updateHintButton() {
         if (tvHint != null) tvHint.setText("Gợi ý: " + (maxHints - hintsUsed) + "/" + maxHints);
