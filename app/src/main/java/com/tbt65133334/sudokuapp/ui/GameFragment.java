@@ -27,8 +27,8 @@ public class GameFragment extends Fragment {
 
     private static final String TAG            = "GameFragment";
     private static final int    MAX_HINTS_EASY = 5;
-    private static final int    MAX_HINTS_MED  = 3;
-    private static final int    MAX_HINTS_HARD = 2;
+    private static final int    MAX_HINTS_MED  = 6;
+    private static final int    MAX_HINTS_HARD = 7;
     private static final int    BASE_EASY      = 1000;
     private static final int    BASE_MED       = 2000;
     private static final int    BASE_HARD      = 3000;
@@ -187,7 +187,7 @@ public class GameFragment extends Fragment {
     }
 
     private void applyPuzzle(String puzzleStr, String solutionStr) {
-        puzzle       = new SudokuPuzzle(puzzleStr, solutionStr, difficulty);
+        puzzle = new SudokuPuzzle(puzzleStr, solutionStr, difficulty);
         currentBoard = copyGrid(puzzle.getPuzzle());
 
         boolean[][] given = new boolean[9][9];
@@ -391,11 +391,49 @@ public class GameFragment extends Fragment {
         int  base    = difficulty == 1 ? BASE_MED : difficulty == 2 ? BASE_HARD : BASE_EASY;
         int  score   = Math.max(100, base - (int) seconds * 2 - hintsUsed * 50);
 
+        Log.d(TAG, "WIN! username=" + username + " score=" + score + " diff=" + difficultyKey());
+
         if (db != null) {
             db.updateBestScore(username, difficulty, score, (int) seconds, hintsUsed);
         }
-
+        saveStatsToFirebase(score, (int) seconds, hintsUsed);
         showWinDialog(score, seconds);
+    }
+    //Lưu thống kê vào Firebase
+    private void saveStatsToFirebase(int score, int time, int hints) {
+        Log.d(TAG, "saveStatsToFirebase called, username=" + username);
+
+        if (username.equals("Guest") || username.isEmpty()) {
+            Log.d(TAG, "Skipped: Guest user");
+            return;
+        }
+
+        DatabaseReference statsRef = FirebaseDatabase.getInstance()
+                .getReference("stats")
+                .child(username)
+                .child(difficultyKey());
+
+        // Chỉ cập nhật nếu điểm mới cao hơn
+        statsRef.addListenerForSingleValueEvent(new ValueEventListener() {
+            @Override
+            public void onDataChange(@NonNull DataSnapshot snapshot) {
+                int oldScore = 0;
+                if (snapshot.exists()) {
+                    Long s = snapshot.child("bestScore").getValue(Long.class);
+                    if (s != null) oldScore = s.intValue();
+                }
+                if (score > oldScore) {
+                    statsRef.child("bestScore").setValue(score);
+                    statsRef.child("bestTime").setValue(time);
+                    statsRef.child("bestHints").setValue(hints);
+                }
+            }
+
+            @Override
+            public void onCancelled(@NonNull DatabaseError error) {
+                Log.e(TAG, "Firebase save error: " + error.getMessage());
+            }
+        });
     }
 
     // ── Dialogs

@@ -134,6 +134,9 @@ public class StartFragment extends Fragment {
         tvHardHints.setText(String.valueOf(hard.getBestHints()));
     }
 
+
+
+
     // ── Tiện ích
     private GameStats getStats(List<GameStats> list, int difficulty) {
         if (list != null) {
