@@ -131,10 +131,16 @@ public class GameFragment extends Fragment {
     }
 
     private String pickNextKey() {
-        if (remainingKeys.isEmpty()) resetRemainingKeys();
+        if (remainingKeys.isEmpty()) {
+            resetRemainingKeys();
+        }
+
         List<String> candidates = new ArrayList<>(remainingKeys);
-        if (candidates.size() > 1 && currentPuzzleKey != null)
+
+        if (candidates.size() > 1 && currentPuzzleKey != null) {
             candidates.remove(currentPuzzleKey);
+        }
+
         String chosen = candidates.get(new Random().nextInt(candidates.size()));
         remainingKeys.remove(chosen);
         return chosen;
@@ -428,7 +434,7 @@ public class GameFragment extends Fragment {
 
             @Override
             public void onCancelled(@NonNull DatabaseError error) {
-                Log.e(TAG, "Firebase save error: " + error.getMessage());
+                Log.e(TAG, "Firebase error: " + error.getMessage());
             }
         });
     }
@@ -460,9 +466,9 @@ public class GameFragment extends Fragment {
             dialog.dismiss();
             keyboardLayout.setVisibility(View.GONE);
         });
+
         if (btnNext  != null) btnNext.setOnClickListener(v -> {
             dialog.dismiss();
-            resetRemainingKeys();
             loadNextPuzzle();
         });
         dialog.setCancelable(false);
