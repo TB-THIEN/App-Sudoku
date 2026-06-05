@@ -85,7 +85,6 @@ public class StartFragment extends Fragment {
 
                 applyToUI(easy, medium, hard);
 
-                // Đồng bộ về SQLite nếu Firebase có điểm cao hơn
                 syncToSQLite(easy);
                 syncToSQLite(medium);
                 syncToSQLite(hard);

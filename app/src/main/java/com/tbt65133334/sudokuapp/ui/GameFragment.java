@@ -42,7 +42,6 @@ public class GameFragment extends Fragment {
     private LinearLayout    keyboardLayout;
     private ImageButton     btnPause;
 
-
     private int     difficulty   = 0;
     private String  username     = "Guest";
     private int     hintsUsed    = 0;
@@ -65,7 +64,6 @@ public class GameFragment extends Fragment {
         super.onCreate(savedInstanceState);
         db = new SudokuDatabase(requireContext());
 
-        // Đọc đúng kiểu int từ DifficultyFragment
         if (getArguments() != null) {
             difficulty = getArguments().getInt("difficulty", 0);
         }
@@ -121,8 +119,6 @@ public class GameFragment extends Fragment {
         return v;
     }
 
-    // ── Difficulty
-
     private String difficultyKey() {
         if (difficulty == 1) return "medium";
         if (difficulty == 2) return "hard";
@@ -154,16 +150,28 @@ public class GameFragment extends Fragment {
                     public void onDataChange(@NonNull DataSnapshot snapshot) {
                         if (!isAdded()) return;
                         if (!snapshot.exists()) {
-                            // Fallback: lấy từ SQLite
                             loadFromSQLite();
                             return;
                         }
-                        String puzzleStr   = snapshot.child("puzzle").getValue(String.class);
-                        String solutionStr = snapshot.child("solution").getValue(String.class);
-                        if (puzzleStr == null || solutionStr == null) {
+
+                        Object rawPuzzle = snapshot.child("puzzle").getValue();
+                        Object rawSolution = snapshot.child("solution").getValue();
+
+                        if (rawPuzzle == null || rawSolution == null) {
                             loadFromSQLite();
                             return;
                         }
+
+                        String puzzleStr = String.valueOf(rawPuzzle);
+                        String solutionStr = String.valueOf(rawSolution);
+
+                        if (puzzleStr.startsWith("s")) {
+                            puzzleStr = puzzleStr.substring(1);
+                        }
+                        if (solutionStr.startsWith("s")) {
+                            solutionStr = solutionStr.substring(1);
+                        }
+
                         applyPuzzle(puzzleStr, solutionStr);
                     }
 
@@ -171,7 +179,6 @@ public class GameFragment extends Fragment {
                     public void onCancelled(@NonNull DatabaseError error) {
                         if (!isAdded()) return;
                         Log.e(TAG, "Firebase error: " + error.getMessage());
-                        // Fallback: lấy từ SQLite
                         loadFromSQLite();
                     }
                 });
@@ -212,8 +219,6 @@ public class GameFragment extends Fragment {
             btnPause.setImageResource(android.R.drawable.ic_media_pause);
     }
 
-    // ── Timer
-
     private void togglePause() {
         if (!isGameActive) return;
         if (!isPaused) {
@@ -242,8 +247,6 @@ public class GameFragment extends Fragment {
         if (isGameActive && !isPaused) togglePause();
     }
 
-    // ── Bàn phím
-
     private void setupKeyboard() {
         if (keyboardLayout == null) return;
         keyboardLayout.removeAllViews();
@@ -265,7 +268,6 @@ public class GameFragment extends Fragment {
         LinearLayout.LayoutParams dp =
                 new LinearLayout.LayoutParams(0, LinearLayout.LayoutParams.WRAP_CONTENT, 1f);
         dp.setMargins(2, 2, 2, 2);
-        btnDel.setLayoutParams(dp);
         btnDel.setOnClickListener(b -> onNumberPressed(0));
         keyboardLayout.addView(btnDel);
     }
@@ -289,8 +291,6 @@ public class GameFragment extends Fragment {
         boardView.setError(row, col, false);
         checkWinCondition();
     }
-
-    // ── Hành động
 
     private void handleCheckAction() {
         if (!isGameActive || isPaused || puzzle == null) return;
@@ -375,8 +375,6 @@ public class GameFragment extends Fragment {
         }
     }
 
-    // ── Chiến thắng
-
     private void checkWinCondition() {
         if (!isGameActive || puzzle == null) return;
         int[][] sol = puzzle.getSolution();
@@ -399,7 +397,7 @@ public class GameFragment extends Fragment {
         saveStatsToFirebase(score, (int) seconds, hintsUsed);
         showWinDialog(score, seconds);
     }
-    //Lưu thống kê vào Firebase
+
     private void saveStatsToFirebase(int score, int time, int hints) {
         Log.d(TAG, "saveStatsToFirebase called, username=" + username);
 
@@ -413,7 +411,6 @@ public class GameFragment extends Fragment {
                 .child(username)
                 .child(difficultyKey());
 
-        // Chỉ cập nhật nếu điểm mới cao hơn
         statsRef.addListenerForSingleValueEvent(new ValueEventListener() {
             @Override
             public void onDataChange(@NonNull DataSnapshot snapshot) {
@@ -435,8 +432,6 @@ public class GameFragment extends Fragment {
             }
         });
     }
-
-    // ── Dialogs
 
     private void showWinDialog(int score, long seconds) {
         Dialog dialog = new Dialog(requireContext());
@@ -489,7 +484,6 @@ public class GameFragment extends Fragment {
         Button btnExit   = dialog.findViewById(R.id.btn_dialog_exit);
         if (btnCancel != null) btnCancel.setOnClickListener(v -> {
             dialog.dismiss();
-            // Resume timer sau khi hủy thoát
             if (isPaused) togglePause();
         });
         if (btnExit != null) btnExit.setOnClickListener(v -> {
@@ -499,8 +493,6 @@ public class GameFragment extends Fragment {
         dialog.setCancelable(false);
         dialog.show();
     }
-
-    // ── Tiện ích
 
     private void updateHintButton() {
         if (tvHint != null) tvHint.setText("Gợi ý: " + (maxHints - hintsUsed) + "/" + maxHints);

@@ -16,14 +16,12 @@ public class SudokuDatabase extends SQLiteOpenHelper {
     private static final String DB_NAME    = "sudoku.db";
     private static final int    DB_VERSION = 2;
 
-    // ── Bảng đề bài ──────────────────────────────────────────────────────────
     public static final String TABLE_PUZZLES  = "puzzles";
     public static final String COL_ID         = "id";
     public static final String COL_DIFFICULTY = "difficulty";
     public static final String COL_PUZZLE     = "puzzle";
     public static final String COL_SOLUTION   = "solution";
 
-    // ── Bảng thành tích theo username ─────────────────────────────────────────
     public static final String TABLE_STATS    = "stats";
     public static final String COL_USERNAME   = "username";
     public static final String COL_DIFF_KEY   = "difficulty";
@@ -37,17 +35,15 @@ public class SudokuDatabase extends SQLiteOpenHelper {
 
     @Override
     public void onCreate(SQLiteDatabase db) {
-        // Bảng đề bài
         db.execSQL("CREATE TABLE " + TABLE_PUZZLES + " (" +
                 COL_ID         + " INTEGER PRIMARY KEY AUTOINCREMENT, " +
-                COL_DIFFICULTY + " INTEGER, " +
+                COL_DIFFICULTY + " TEXT, " +
                 COL_PUZZLE     + " TEXT, " +
                 COL_SOLUTION   + " TEXT)");
 
-        // Bảng thành tích: khóa chính ghép (username, difficulty)
         db.execSQL("CREATE TABLE " + TABLE_STATS + " (" +
                 COL_USERNAME   + " TEXT NOT NULL, " +
-                COL_DIFF_KEY   + " INTEGER NOT NULL, " +
+                COL_DIFF_KEY   + " TEXT NOT NULL, " +
                 COL_BEST_SCORE + " INTEGER DEFAULT 0, " +
                 COL_BEST_TIME  + " INTEGER DEFAULT 0, " +
                 COL_BEST_HINTS + " INTEGER DEFAULT 0, " +
@@ -62,8 +58,6 @@ public class SudokuDatabase extends SQLiteOpenHelper {
         db.execSQL("DROP TABLE IF EXISTS " + TABLE_STATS);
         onCreate(db);
     }
-
-    // ── Đề bài ───────────────────────────────────────────────────────────────
 
     public String[] getRandomPuzzle(int difficulty) {
         SQLiteDatabase db = getReadableDatabase();
@@ -97,13 +91,10 @@ public class SudokuDatabase extends SQLiteOpenHelper {
         return count;
     }
 
-    // ── Thành tích theo username ──────────────────────────────────────────────
-
     public void updateBestScore(String username, int difficulty,
                                 int score, int timeSeconds, int hints) {
         SQLiteDatabase db = getWritableDatabase();
 
-        // Đọc điểm hiện tại
         Cursor cursor = db.query(TABLE_STATS,
                 new String[]{COL_BEST_SCORE},
                 COL_USERNAME + "=? AND " + COL_DIFF_KEY + "=?",
@@ -159,8 +150,6 @@ public class SudokuDatabase extends SQLiteOpenHelper {
         }
         return list;
     }
-
-    // ── Preload đề bài ────────────────────────────────────────────────────────
 
     private void preloadPuzzles(SQLiteDatabase db) {
         String[][] easy = {
