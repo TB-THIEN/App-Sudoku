@@ -137,7 +137,7 @@ public class GameFragment extends Fragment {
         }
 
         List<String> candidates = new ArrayList<>(remainingKeys);
-        
+
         if (candidates.size() > 1 && currentPuzzleKey != null) {
             candidates.remove(currentPuzzleKey);
         }
